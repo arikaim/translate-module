@@ -9,26 +9,32 @@
 */
 namespace Arikaim\Modules\Translate\Driver;
 
-use Google\Cloud\Translate\V2\TranslateClient;
-
 use Arikaim\Core\Arikaim;
 use Arikaim\Core\Driver\Traits\Driver;
 use Arikaim\Core\Interfaces\Driver\DriverInterface;
 use Arikaim\Modules\Translate\TranslateInterface;
+use Arikaim\Core\Utils\Curl;
 
 /**
- * Google translate driver class
+ * Google simple translate driver class
  */
-class GoogleTranslate implements DriverInterface, TranslateInterface
+class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
 {   
     use Driver;
+
+    /**
+     * Api base url
+     *
+     * @var string
+     */
+    protected $baseUrl;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDriverParams('google','translate','GoogleTranslate','Driver for Goolge translate service');      
+        $this->setDriverParams('google-simple','translate','GoogleSimpleTranslate','Goolge simple translatation service');      
     }
 
     /**
@@ -41,12 +47,14 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
      */
     public function translate($text, $targetLanguage, $sourceLanguage = null)
     {
-        $result = $this->instance->translate($text,[
-            'source' => $sourceLanguage,
-            'target' => $targetLanguage
-        ]);
+        $sourceLanguage= (empty($sourceLanguage) == true) ? 'auto': $sourceLanguage;
+        $text = urlencode($text);
+        $url = $this->baseUrl . "single?client=gtx&sl=" . $sourceLanguage . "&tl=" . $targetLanguage . "&dt=t&q=" . $text;
 
-        return $result['text'];
+        $json = Curl::get($url);
+        $result = json_decode($json,true);
+
+        return (isset($result[0][0][0]) == true) ? $result[0][0][0] : false;
     }
 
     /**
@@ -57,9 +65,7 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
      */
     public function detectLanguage($text)
     {
-        $result = $this->instance->detectLanguage($text);
-
-        return $result['languageCode'];
+        return false;
     }
 
     /**
@@ -69,7 +75,7 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
      */
     public function getLanguages()
     {
-        return $this->instance->languages();
+        return [];
     }
 
     /**
@@ -79,10 +85,7 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
      */
     public function initDriver($properties)
     {
-        $apiKey = $properties->getValue('api_key');
-        $this->instance = new TranslateClient([
-            'key' => $apiKey
-        ]);        
+        $this->baseUrl = $properties->getValue('baseUrl');        
     }
 
     /**
@@ -93,12 +96,13 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
      */
     public function createDriverConfig($properties)
     {
-        $properties->property('api_key',function($property) {
+        $properties->property('baseUrl',function($property) {
             $property
-                ->title('Api Key')
+                ->title('Base Url')
                 ->type('text')
-                ->default('')
-                ->required(true);
+                ->default('https://translate.googleapis.com/translate_a/')
+                ->value('https://translate.googleapis.com/translate_a/')
+                ->readonly(true);              
         });        
     }
 }

@@ -17,12 +17,12 @@ interface TranslateInterface
     /**
      * Translate text
      *
-     * @param string $text
-     * @param string $sourceLanguage
+     * @param string $text    
      * @param string $targetLanguage
+     * @param string|null $sourceLanguage
      * @return string|false
      */
-    public function translate($text, $sourceLanguage, $targetLanguage);
+    public function translate($text, $targetLanguage, $sourceLanguage = null);
 
     /**
      * Detect language
@@ -31,4 +31,11 @@ interface TranslateInterface
      * @return string|false
      */
     public function detectLanguage($text);
+
+    /**
+     * Get supported languages
+     *
+     * @return array
+     */
+    public function getLanguages();
 }
