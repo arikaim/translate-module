@@ -1,0 +1,16 @@
+{
+    "title": "Translate",
+    "name": "translate",
+    "version": "1.0.0",
+    "package-type": "module",
+    "class": "Translate",
+    "description": "Translation api",
+    "type": "package",
+    "category": "translate",
+    "repository": "https://github.com/arikaim/translate-module",
+    "require": {
+        "composer": [
+            "google/cloud-translate"
+        ]
+    }
+}

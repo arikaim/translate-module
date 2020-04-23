@@ -1,0 +1,20 @@
+{
+    "name": "arikaim/translate-module",
+    "description": "Arikam CMS Translate Module",
+    "keywords": ["Module", "Arikaim CMS Translate module"],
+    "type": "arikaim-module",
+    "license": "GPL-3.0-or-later",
+    "authors": [{
+        "name": "Konstantin Atanasov",
+        "email": "info@arikaim.com",
+        "homepage": "http://arikaim.com"
+    }],
+    "require": {
+        "php": ">=7.1",
+        "arikaim/installer": "*",
+        "google/cloud-translate": "^1.7.0"
+    },
+    "extra": {
+        "path": "translate"
+    }
+}
