@@ -8,7 +8,7 @@ Arikaim CMS Language Translations Module
 
 #### Drivers: 
   - Google Cloud Translation
- 
+  - Yandex Translation Api
  
 #### Requirements 
   * PHP 7.1
