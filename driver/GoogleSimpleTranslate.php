@@ -48,11 +48,11 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
     public function translate($text, $targetLanguage, $sourceLanguage = null)
     {
         $sourceLanguage= (empty($sourceLanguage) == true) ? 'auto': $sourceLanguage;
-        $text = urlencode($text);
+        $text = \urlencode($text);
         $url = $this->baseUrl . "single?client=gtx&sl=" . $sourceLanguage . "&tl=" . $targetLanguage . "&dt=t&q=" . $text;
         
         $json = Curl::get($url);
-        $result = json_decode($json,true);
+        $result = \json_decode($json,true);
 
         return (isset($result[0][0][0]) == true) ? $result[0][0][0] : false;
     }

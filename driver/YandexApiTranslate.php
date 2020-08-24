@@ -55,22 +55,22 @@ class YandexApiTranslate implements DriverInterface, TranslateInterface
     public function translate($text, $targetLanguage, $sourceLanguage = null)
     {
         $sourceLanguage = (empty($sourceLanguage) == true) ? 'en': $sourceLanguage;
-        $text = urlencode($text);
+        $text = \urlencode($text);
         $url = $this->baseUrl . "translate?lang=" . $sourceLanguage . "-" . $targetLanguage;
     
         $data = [
             'key'  => $this->apiKey,
             'text' => $text
         ];
-        $data = http_build_query($data);      
+        $data = \http_build_query($data);      
         $json = Curl::post($url,$data,[
             'Accept: */*',
             'Content-Type: application/x-www-form-urlencoded'
         ]);
      
-        $result = json_decode($json,true);
+        $result = \json_decode($json,true);
 
-        return (isset($result['text'][0]) == true) ? urldecode($result['text'][0]) : false;
+        return (isset($result['text'][0]) == true) ? \urldecode($result['text'][0]) : false;
     }
 
     /**
@@ -95,13 +95,13 @@ class YandexApiTranslate implements DriverInterface, TranslateInterface
         $data = [
             'key'  => $this->apiKey           
         ];
-        $data = http_build_query($data);  
+        $data = \http_build_query($data);  
 
         $json = Curl::post($url,$data,[
             'Accept: */*',
             'Content-Type: application/x-www-form-urlencoded'
         ]);
-        $result = json_decode($json,true);
+        $result = \json_decode($json,true);
        
         return (isset($result['langs']) == true) ? $result['langs'] : false;       
     }
