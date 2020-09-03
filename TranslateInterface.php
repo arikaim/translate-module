@@ -38,4 +38,11 @@ interface TranslateInterface
      * @return array
      */
     public function getLanguages();
+
+    /**
+     * Get error message
+     *
+     * @return string
+     */
+    public function getErrorMessage();
 }

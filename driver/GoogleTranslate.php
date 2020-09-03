@@ -24,6 +24,13 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
     use Driver;
 
     /**
+     * Error message
+     *
+     * @var string
+     */
+    protected $errorMessage = '';
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -47,6 +54,16 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
         ]);
 
         return $result['text'];
+    }
+
+    /**
+     * Get error message
+     *
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
     }
 
     /**

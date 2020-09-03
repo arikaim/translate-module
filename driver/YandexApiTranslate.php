@@ -37,6 +37,13 @@ class YandexApiTranslate implements DriverInterface, TranslateInterface
     protected $apiKey;
 
     /**
+     * Error message
+     *
+     * @var string
+     */
+    protected $errorMessage = '';
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -69,8 +76,21 @@ class YandexApiTranslate implements DriverInterface, TranslateInterface
         ]);
      
         $result = \json_decode($json,true);
-
+        if (isset($result['code']) == true) {
+            $this->errorMessage = ($result['code'] == 402) ? $result['message'] : '';
+        }
+       
         return (isset($result['text'][0]) == true) ? \urldecode($result['text'][0]) : false;
+    }
+
+    /**
+     * Get error message
+     *
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return $this->errorMessage;
     }
 
     /**
@@ -103,7 +123,7 @@ class YandexApiTranslate implements DriverInterface, TranslateInterface
         ]);
         $result = \json_decode($json,true);
        
-        return (isset($result['langs']) == true) ? $result['langs'] : false;       
+        return (isset($result['langs']) == true) ? $result['langs'] : [];       
     }
 
     /**
