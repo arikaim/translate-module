@@ -71,7 +71,8 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function getErrorMessage()
     {
-        return $this->errorMessage;
+        $defaultErr = 'Google Error: Our systems have detected unusual traffic from your computer network. The block will expire shortly after those requests stop.';
+        return (empty($this->errorMessage) == true) ? $defaultErr : $this->errorMessage;
     }
 
     /**
