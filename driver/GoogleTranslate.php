@@ -11,7 +11,7 @@ namespace Arikaim\Modules\Translate\Driver;
 
 use Google\Cloud\Translate\V2\TranslateClient;
 
-use Arikaim\Core\Arikaim;
+use Arikaim\Core\Http\Url;
 use Arikaim\Core\Driver\Traits\Driver;
 use Arikaim\Core\Interfaces\Driver\DriverInterface;
 use Arikaim\Modules\Translate\TranslateInterface;
@@ -97,9 +97,16 @@ class GoogleTranslate implements DriverInterface, TranslateInterface
     public function initDriver($properties)
     {
         $apiKey = $properties->getValue('api_key');
-        $this->instance = new TranslateClient([
-            'key' => $apiKey
-        ]);        
+        $options = [
+            'key'         => $apiKey,
+            'restOptions' => [
+                'headers' => [
+                    'referer' => Url::BASE_URL
+                ]
+            ]
+        ];
+
+        $this->instance = new TranslateClient($options);        
     }
 
     /**

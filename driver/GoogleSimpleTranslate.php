@@ -54,7 +54,7 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function translate($text, $targetLanguage, $sourceLanguage = null)
     {
-        $sourceLanguage= (empty($sourceLanguage) == true) ? 'auto': $sourceLanguage;
+        $sourceLanguage = (empty($sourceLanguage) == true) ? 'auto': $sourceLanguage;
         $text = \urlencode($text);
         $url = $this->baseUrl . "single?client=gtx&sl=" . $sourceLanguage . "&tl=" . $targetLanguage . "&dt=t&q=" . $text;
     
