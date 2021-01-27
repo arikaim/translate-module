@@ -10,8 +10,7 @@ Arikaim CMS Language Translations Module
   - Google Cloud Translation
   - Yandex Translation Api
  
-#### Requirements 
-  * PHP 7.1, 7.2, 7.3, 7.4
+#### Requirements  
   * [Arikaim CMS](https://github.com/arikaim/arikaim)
 
 
