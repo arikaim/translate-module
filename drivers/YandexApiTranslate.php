@@ -7,7 +7,7 @@
  * @license     http://www.arikaim.com/license
  * 
 */
-namespace Arikaim\Modules\Translate\Driver;
+namespace Arikaim\Modules\Translate\Drivers;
 
 use Arikaim\Core\Arikaim;
 use Arikaim\Core\Driver\Traits\Driver;

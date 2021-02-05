@@ -30,9 +30,9 @@ class Translate extends Module
      */
     public function install()
     {
-        $this->installDriver('Arikaim\\Modules\\Translate\\Driver\\GoogleTranslate');
-        $this->installDriver('Arikaim\\Modules\\Translate\\Driver\\GoogleSimpleTranslate');
-        $this->installDriver('Arikaim\\Modules\\Translate\\Driver\\YandexApiTranslate');
+        $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\GoogleTranslate');
+        $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\GoogleSimpleTranslate');
+        $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\YandexApiTranslate');
 
         return true;
     }

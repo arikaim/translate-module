@@ -7,27 +7,21 @@
  * @license     http://www.arikaim.com/license
  * 
 */
-namespace Arikaim\Modules\Translate\Driver;
+namespace Arikaim\Modules\Translate\Drivers;
 
-use Arikaim\Core\Arikaim;
+use Google\Cloud\Translate\V2\TranslateClient;
+
+use Arikaim\Core\Http\Url;
 use Arikaim\Core\Driver\Traits\Driver;
 use Arikaim\Core\Interfaces\Driver\DriverInterface;
 use Arikaim\Modules\Translate\TranslateInterface;
-use Arikaim\Core\Utils\Curl;
 
 /**
- * Google simple translate driver class
+ * Google translate driver class
  */
-class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
+class GoogleTranslate implements DriverInterface, TranslateInterface
 {   
     use Driver;
-
-    /**
-     * Api base url
-     *
-     * @var string
-     */
-    protected $baseUrl;
 
     /**
      * Error message
@@ -35,13 +29,13 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      * @var string
      */
     protected $errorMessage = '';
-
+    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDriverParams('google-simple','translate','GoogleSimpleTranslate','Goolge simple translatation service');      
+        $this->setDriverParams('google','translate','GoogleTranslate','Driver for Goolge translate service');      
     }
 
     /**
@@ -54,14 +48,12 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function translate($text, $targetLanguage, $sourceLanguage = null)
     {
-        $sourceLanguage = (empty($sourceLanguage) == true) ? 'auto': $sourceLanguage;
-        $text = \urlencode($text);
-        $url = $this->baseUrl . "single?client=gtx&sl=" . $sourceLanguage . "&tl=" . $targetLanguage . "&dt=t&q=" . $text;
-    
-        $json = Curl::get($url);
-        $result = \json_decode($json,true);
+        $result = $this->instance->translate($text,[
+            'source' => $sourceLanguage,
+            'target' => $targetLanguage
+        ]);
 
-        return (isset($result[0][0][0]) == true) ? $result[0][0][0] : false;
+        return $result['text'];
     }
 
     /**
@@ -71,8 +63,7 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function getErrorMessage()
     {
-        $defaultErr = 'Google Error: Our systems have detected unusual traffic from your computer network. The block will expire shortly after those requests stop.';
-        return (empty($this->errorMessage) == true) ? $defaultErr : $this->errorMessage;
+        return $this->errorMessage;
     }
 
     /**
@@ -83,7 +74,9 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function detectLanguage($text)
     {
-        return false;
+        $result = $this->instance->detectLanguage($text);
+
+        return $result['languageCode'];
     }
 
     /**
@@ -93,7 +86,7 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function getLanguages()
     {
-        return [];
+        return $this->instance->languages();
     }
 
     /**
@@ -103,7 +96,17 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function initDriver($properties)
     {
-        $this->baseUrl = $properties->getValue('baseUrl');        
+        $apiKey = $properties->getValue('api_key');
+        $options = [
+            'key'         => $apiKey,
+            'restOptions' => [
+                'headers' => [
+                    'referer' => Url::BASE_URL
+                ]
+            ]
+        ];
+
+        $this->instance = new TranslateClient($options);        
     }
 
     /**
@@ -114,13 +117,12 @@ class GoogleSimpleTranslate implements DriverInterface, TranslateInterface
      */
     public function createDriverConfig($properties)
     {
-        $properties->property('baseUrl',function($property) {
+        $properties->property('api_key',function($property) {
             $property
-                ->title('Base Url')
+                ->title('Api Key')
                 ->type('text')
-                ->default('https://translate.googleapis.com/translate_a/')
-                ->value('https://translate.googleapis.com/translate_a/')
-                ->readonly(true);              
+                ->default('')
+                ->required(true);
         });        
     }
 }
