@@ -17,13 +17,6 @@ use Arikaim\Core\Extension\Module;
 class Translate extends Module
 {   
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Install module
      *
      * @return void
@@ -33,7 +26,5 @@ class Translate extends Module
         $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\GoogleTranslate');
         $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\GoogleSimpleTranslate');
         $this->installDriver('Arikaim\\Modules\\Translate\\Drivers\\YandexApiTranslate');
-
-        return true;
     }
 }
